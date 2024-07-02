@@ -45,6 +45,10 @@ const movieSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  seen_date: {
+    type: Date,
+    required: false,
+  },
   list_id: {
     type: Number,
     required: true,
