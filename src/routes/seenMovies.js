@@ -100,7 +100,6 @@ router.get("/movies/seen/search", async (req, res) => {
       }
     }
   }
-  console.log(sortCriteria);
 
   // Añadir criterio de ordenamiento para 'original_title' si está definido
 
@@ -117,6 +116,7 @@ router.get("/movies/seen/search", async (req, res) => {
   if (isNaN(start) && isNaN(end)) {
     movieSchema
       .find(name ? { ...searchFilter, seen: true } : { seen: true })
+      .sort({ ...sortCriteria, seen_date: -1 })
       .then((data) => {
         res.json(data);
       })
@@ -126,6 +126,7 @@ router.get("/movies/seen/search", async (req, res) => {
   } else if (isNaN(start)) {
     movieSchema
       .find(name ? { ...searchFilter, seen: true } : { seen: true })
+      .sort({ ...sortCriteria, seen_date: -1 })
       .limit(end)
       .then((data) => {
         res.json(data);
@@ -136,6 +137,7 @@ router.get("/movies/seen/search", async (req, res) => {
   } else if (isNaN(end)) {
     movieSchema
       .find(name ? { ...searchFilter, seen: true } : { seen: true })
+      .sort({ ...sortCriteria, seen_date: -1 })
       .skip(start)
       .then((data) => {
         res.json(data);
@@ -146,7 +148,7 @@ router.get("/movies/seen/search", async (req, res) => {
   } else {
     movieSchema
       .find(name ? { ...searchFilter, seen: true } : { seen: true })
-      .sort(sortCriteria)
+      .sort({ ...sortCriteria, seen_date: -1 })
       .skip(start)
       .limit(20)
       .then((data) => {
