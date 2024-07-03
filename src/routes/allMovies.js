@@ -132,7 +132,7 @@ router.get("/movies/search", async (req, res) => {
   } else {
     movieSchema
       .find(name ? searchFilter : {})
-      .sort(sortCriteria)
+      .sort({ ...sortCriteria, list_id: 1 })
       .skip(start)
       .limit(20)
       .then((data) => {

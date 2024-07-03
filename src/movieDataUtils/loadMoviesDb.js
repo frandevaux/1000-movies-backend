@@ -5,7 +5,7 @@ async function loadMoviesDb() {
   try {
     // Read the JSON file
     const jsonData = fs.readFileSync(
-      "C:/Users/User/Desktop/Codigos/1000-movies/backend/src/movieDataUtils/moviesDetails.json",
+      "C:/Users/User/Desktop/Codigos/1000-movies/1000-movies-backend/src/movieDataUtils/datosProcesados.json",
       "utf8"
     );
     const movies = JSON.parse(jsonData);
@@ -18,7 +18,7 @@ async function loadMoviesDb() {
         movie
       );
       console.log(
-        `Movie "${movie.title}" added successfully. Response:`,
+        `Movie "${movie.title}" id: ${movie.list_id} added successfully. Response:`,
         response.data
       );
     }
