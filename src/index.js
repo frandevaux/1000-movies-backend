@@ -2,10 +2,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require("express");
-const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const movieRoutes = require("./routes/movie");
 const moviesRoutes = require("./routes/allMovies");
 const seenMoviesRoutes = require("./routes/seenMovies");
+const authRoutes = require("./routes/auth.routes.js");
+require = require("esm")(module);
+const { connectDB } = require("./db");
 
 const app = express();
 
@@ -13,17 +16,10 @@ const PORT = process.env.API_PORT || 9000;
 
 // Middlewares
 
+connectDB();
 app.use(express.json());
-app.use("/api", movieRoutes, moviesRoutes, seenMoviesRoutes);
-
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Database connected successfully");
-  })
-  .catch((error) => {
-    console.log("Database connection failed");
-  });
+app.use(cookieParser());
+app.use("/api", movieRoutes, moviesRoutes, seenMoviesRoutes, authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
