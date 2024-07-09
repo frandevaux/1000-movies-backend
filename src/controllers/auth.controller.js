@@ -1,14 +1,23 @@
 const User = require("../models/user.model");
 const { createAccessToken } = require("../libs/jwt");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
 const register = async (req, res) => {
   const { email, password, username, seenMovies } = req.body;
+  let userFound;
 
   try {
+    userFound = await User.findOne({ email });
+    if (userFound) {
+      return res.status(409).json({ message: "Email already exists" });
+    }
+    userFound = await User.findOne({ username });
+    if (userFound) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
     const newUser = new User({

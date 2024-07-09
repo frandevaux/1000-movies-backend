@@ -144,4 +144,31 @@ router.get("/repeated-list-ids", async (req, res) => {
   res.json({ repeatedListIds });
 });
 
+router.post("/random-movie", async (req, res) => {
+  try {
+    // Asume que el cuerpo del pedido contiene un array de IDs de películas vistas
+    const { seenMovies } = req.body; // Obtiene el array de IDs del cuerpo del pedido
+    console.log(seenMovies);
+    const randomMovie = await movieSchema.aggregate([
+      { $match: { id: { $nin: seenMovies } } }, // Excluye las películas vistas
+      { $sample: { size: 1 } }, // Selecciona una película al azar de las no vistas
+    ]);
+    console.log(randomMovie);
+
+    if (randomMovie.length) {
+      res.json(randomMovie[0]); // $sample devuelve un array, así que obtenemos el primer elemento
+    } else {
+      res
+        .status(404)
+        .json({ message: "No se encontraron películas no vistas" });
+    }
+  } catch (error) {
+    //console.log(error);
+    res.status(500).json({
+      message: "Error al obtener una película aleatoria no vista",
+      error,
+    });
+  }
+});
+
 module.exports = router;

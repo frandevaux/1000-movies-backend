@@ -3,6 +3,7 @@ dotenv.config();
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const movieRoutes = require("./routes/movie");
 const moviesRoutes = require("./routes/allMovies");
 const seenMoviesRoutes = require("./routes/seenMovies");
@@ -17,6 +18,7 @@ const PORT = process.env.API_PORT || 9000;
 // Middlewares
 
 connectDB();
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", movieRoutes, moviesRoutes, seenMoviesRoutes, authRoutes);
